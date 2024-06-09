@@ -5,7 +5,7 @@ from transformers import PreTrainedTokenizerFast, BartModel
 from collections import OrderedDict
 
 
-class Kobart(nn.Module):
+class TST(nn.Module):
     def __init__(self, args):
         super().__init__()
 
@@ -59,7 +59,7 @@ class Kobart(nn.Module):
         super().to(device)
 
 
-class MetaKobart(nn.Module):
+class MetaTST(nn.Module):
     def __init__(self, args):
         super().__init__()
 

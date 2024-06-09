@@ -3,7 +3,7 @@ import random
 import numpy as np
 import torch
 
-from model import Kobart, MetaKobart
+from model import TST, MetaTST
 from dataset import TextStyleDataset, MetaTextStyleDataset
 from train import train_kobart, train_meta_kobart
 from test import test_kobart, test_meta_kobart
@@ -51,16 +51,15 @@ if __name__ == "__main__":
 
     if args.mode == "train" and args.type == "meta":
         train_dataset = MetaTextStyleDataset(args)
-        model = MetaKobart(args)
-        model.load_state_dict(torch.load(f"checkpoint/kobart10.pth", map_location="cpu"), strict=False)
+        model = MetaTST(args)
+        model.load_state_dict(torch.load(f"checkpoint/TST.pth", map_location="cpu"), strict=False)
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-        lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, args.epoch)
 
-        train_meta_kobart(model, args, train_dataset, optimizer, lr_scheduler=lr_scheduler)
+        train_meta_kobart(model, args, train_dataset, optimizer)
     
     elif args.mode == "train" and args.type == "basic":
         train_dataset = TextStyleDataset(args)
-        model = Kobart(args)
+        model = TST(args)
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
         train_kobart(model, args, train_dataset, optimizer)
@@ -68,7 +67,7 @@ if __name__ == "__main__":
     elif args.mode == "test" and args.type == "meta":
         args.num_inner_loop = 10
         test_dataset = MetaTextStyleDataset(args)
-        model = MetaKobart(args)
+        model = MetaTST(args)
         model.load_state_dict(torch.load(f"checkpoint/{args.ckpt}", map_location="cpu"))
         
         test_meta_kobart(model, args, test_dataset)
@@ -76,7 +75,7 @@ if __name__ == "__main__":
 
     elif args.mode == "test" and args.type == "basic":
         test_dataset = TextStyleDataset(args)
-        model = Kobart(args)
+        model = TST(args)
         model.load_state_dict(torch.load(f"checkpoint/{args.ckpt}", map_location="cpu"))
         
         test_kobart(model, args, test_dataset)
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     elif args.mode == "evaluation" and args.type == "meta":
         args.num_inner_loop = 10
         test_dataset = MetaTextStyleDataset(args)
-        model = MetaKobart(args)
+        model = MetaTST(args)
         model.load_state_dict(torch.load(f"checkpoint/{args.ckpt}", map_location="cpu"))
 
         calculate_bleu(f"output/{args.ckpt[:-4]}.txt", model.tokenizer)
@@ -92,7 +91,7 @@ if __name__ == "__main__":
 
     elif args.mode == "evaluation" and args.type == "basic":
         test_dataset = TextStyleDataset(args)
-        model = Kobart(args)
+        model = TST(args)
         model.load_state_dict(torch.load(f"checkpoint/{args.ckpt}", map_location="cpu"))
 
         calculate_bleu(f"output/{args.ckpt[:-4]}.txt", model.tokenizer)
