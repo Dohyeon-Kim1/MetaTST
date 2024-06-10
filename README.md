@@ -16,7 +16,7 @@ python main.py --mode=train --type=meta
 # test TST
 python main.py --mode=test --type=basic
 
-# test Meta
+# test MetaTST
 python main.py --mode=test --type=meta
 ```
 
