@@ -1,4 +1,4 @@
-# MetaTST
+# Meta Text Style Transfer (MetaTST)
 
 ## Train
 
@@ -10,7 +10,7 @@ python main.py --mode=trian --type=basic --epoch=30
 python main.py --mode=train --type=meta
 ```
 
-## Test (Genneration)
+## Test (Generation)
 
 ```python
 # test TST
